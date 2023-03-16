@@ -59,7 +59,8 @@ object GameEngine {
         HELPER FUNCTIONS
      */
 
-    // check
+    // check for the correct guesses in incorrect locations, I had to do it this way
+    // to avoid false positives/negatives.
     private fun HasAvailablePosition(value: Int) : Boolean{
         for(i in masterCode.indices)
             if(masterCode[i].value == value && !masterCode[i].used){
