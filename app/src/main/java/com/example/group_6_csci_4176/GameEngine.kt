@@ -40,6 +40,7 @@ object GameEngine {
             }
         }
 
+        // get the guesses.
         for(i in guessedCode.indices){
             if(HasAvailablePosition(guessedCode[i])) results[1] += 1
         }
