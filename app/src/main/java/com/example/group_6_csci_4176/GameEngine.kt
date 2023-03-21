@@ -12,9 +12,13 @@ object GameEngine {
     private fun GameEngine(){}
 
     // Create the game by selecting 4 total different numbers from 1-8.
-    fun CreateGame(){
+    fun CreateGame(settings : Settings){
         // Create an array of different tokens
         masterCode = Array(8){ Token(Random.nextInt(1, 8 + 1)) }
+
+        println("Number of Tokens: ${settings.numberOfTokens}")
+        println("Number of Guesses: ${settings.numberOfGuesses}")
+        println("Colourblind: ${settings.colourBlind}")
 
         println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}\t${masterCode[4]}\t${masterCode[5]}\t${masterCode[6]}\t${masterCode[7]}")
     }
