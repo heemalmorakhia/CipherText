@@ -1,5 +1,7 @@
 package com.example.group_6_csci_4176
 
+import java.util.Collections
+import kotlin.properties.Delegates
 import kotlin.random.Random
 
 // A data class for use in our application. I read through the documentation for this and it is really simple.
@@ -8,19 +10,29 @@ data class Token(var value: Int = 0, var used: Boolean = false)
 
 object GameEngine {
     private lateinit var masterCode : Array<Token>
+    private var guesses by Delegates.notNull<Int>()
+    private var maxGuesses by Delegates.notNull<Int>()
 
     private fun GameEngine(){}
 
     // Create the game by selecting 4 total different numbers from 1-8.
     fun CreateGame(settings : Settings){
-        // Create an array of different tokens
-        masterCode = Array(8){ Token(Random.nextInt(1, 8 + 1)) }
+        guesses = 0
+        maxGuesses = settings.numberOfGuesses
 
-        println("Number of Tokens: ${settings.numberOfTokens}")
-        println("Number of Guesses: ${settings.numberOfGuesses}")
-        println("Colourblind: ${settings.colourBlind}")
+        // Create an array of different tokens
+        masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
 
         println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}\t${masterCode[4]}\t${masterCode[5]}\t${masterCode[6]}\t${masterCode[7]}")
+    }
+
+    private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){
+        // This function will create the cipher and replace line 23 using all the different options available
+        masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        else {
+            val potentialValues : List<Int> =  (0..8).shuffled().take(numberOfTokens)
+            Array(numberOfTokens){i -> Token(potentialValues[i])}
+        }
     }
 
     fun TestResult(guessedCode : IntArray) : IntArray {
@@ -55,8 +67,12 @@ object GameEngine {
         return results
     }
 
-    fun GetCodeLength() : Int{
+    fun GetCodeLength() : Int {
         return masterCode.size
+    }
+
+    fun GameLost() : Boolean {
+        return guesses == maxGuesses
     }
 
     /*

@@ -1,5 +1,6 @@
 {
   "numberOfTokens" : 4,
   "numberOfGuesses" : 10,
-  "colourBlind" : false
+  "colourBlind" : false,
+  "duplicates" : false
 }
