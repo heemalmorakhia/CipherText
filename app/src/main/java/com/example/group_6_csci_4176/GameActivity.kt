@@ -1,5 +1,6 @@
 package com.example.group_6_csci_4176
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,7 +9,10 @@ import android.widget.EditText
 import android.widget.TextView
 import org.json.JSONObject
 
-data class Settings(var numberOfTokens: Int = 0, var numberOfGuesses: Int = 0, var colourBlind : Boolean = false);
+data class Settings(var numberOfTokens: Int = 0,
+                    var numberOfGuesses: Int = 0,
+                    var colourBlind : Boolean = false,
+                    var duplicates : Boolean = true);
 
 class GameActivity : AppCompatActivity() {
     final lateinit var gameEngine: GameEngine
@@ -24,6 +28,7 @@ class GameActivity : AppCompatActivity() {
         submitButton.setOnClickListener(_submitClicked)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private val _submitClicked = View.OnClickListener {
         // Create the guessed pattern array
         var guessedPattern = IntArray(gameEngine.GetCodeLength())
@@ -56,7 +61,8 @@ class GameActivity : AppCompatActivity() {
         return Settings(
             numberOfTokens = settingsJSON.getInt("numberOfTokens"),
             numberOfGuesses = settingsJSON.getInt("numberOfGuesses"),
-            colourBlind = settingsJSON.getBoolean("colourBlind")
+            colourBlind = settingsJSON.getBoolean("colourBlind"),
+            duplicates = settingsJSON.getBoolean("duplicates")
         )
     }
 }
