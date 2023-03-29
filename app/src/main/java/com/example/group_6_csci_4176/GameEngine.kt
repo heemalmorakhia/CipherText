@@ -27,7 +27,6 @@ object GameEngine {
     }
 
     private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){
-        // This function will create the cipher and replace line 23 using all the different options available
         masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
         else {
             val potentialValues : List<Int> =  (0..8).shuffled().take(numberOfTokens)
