@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
         val settingsButton = findViewById<Button>(R.id.settingsButton)
         settingsButton.setOnClickListener(_settingsClicked)
+
+        val quitButton = findViewById<Button>(R.id.quitButton)
+        quitButton.setOnClickListener(_quitClicked)
     }
 
     private val _toGameClicked = View.OnClickListener {
@@ -30,5 +34,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val _quitClicked = View.OnClickListener {
+        exitProcess(0)
     }
 }
