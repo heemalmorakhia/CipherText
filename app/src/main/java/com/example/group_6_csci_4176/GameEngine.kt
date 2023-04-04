@@ -1,5 +1,6 @@
 package com.example.group_6_csci_4176
 
+import android.util.Log
 import java.util.Collections
 import kotlin.properties.Delegates
 import kotlin.random.Random
@@ -21,15 +22,16 @@ object GameEngine {
         maxGuesses = settings.numberOfGuesses
 
         // Create an array of different tokens
-        masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        GenerateCipher(settings.numberOfTokens, settings.duplicates)
 
-        println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}\t${masterCode[4]}\t${masterCode[5]}\t${masterCode[6]}\t${masterCode[7]}")
+        println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}")
     }
 
     private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){
         masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
         else {
-            val potentialValues : List<Int> =  (0..8).shuffled().take(numberOfTokens)
+            val potentialValues : List<Int> =  (1..8).shuffled().take(numberOfTokens)
             Array(numberOfTokens){i -> Token(potentialValues[i])}
         }
     }
