@@ -16,22 +16,22 @@ object GameEngine {
 
     private fun GameEngine(){}
 
-    // Create the game by selecting 4 total different numbers from 1-8.
+    // Create the game by selecting 4 total different numbers from 1-6.
     fun CreateGame(settings : Settings){
         guesses = 0
         maxGuesses = settings.numberOfGuesses
 
         // Create an array of different tokens
-        //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
         GenerateCipher(settings.numberOfTokens, settings.duplicates)
 
         println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}")
     }
 
     private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){
-        masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
         else {
-            val potentialValues : List<Int> =  (1..8).shuffled().take(numberOfTokens)
+            val potentialValues : List<Int> =  (1..6).shuffled().take(numberOfTokens)
             Array(numberOfTokens){i -> Token(potentialValues[i])}
         }
     }

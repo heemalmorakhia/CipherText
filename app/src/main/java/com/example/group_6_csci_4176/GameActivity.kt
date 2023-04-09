@@ -3,6 +3,7 @@ package com.example.group_6_csci_4176
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -17,6 +18,9 @@ data class Settings(var numberOfTokens: Int = 0,
 class GameActivity : AppCompatActivity() {
     final lateinit var gameEngine: GameEngine
 
+    var guessedPattern = IntArray(4)
+    var guessedPatternIndex = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -24,24 +28,96 @@ class GameActivity : AppCompatActivity() {
         gameEngine = GameEngine
         gameEngine.CreateGame(readSettings())
 
-        val submitButton = findViewById<Button>(R.id.submitGuessButton)
+        println("Made it here.")
+
+        // guessedPattern = IntArray(gameEngine.GetCodeLength())
+
+        val value1Button = findViewById<Button>(R.id.value1Button)
+        value1Button.setOnClickListener(_value1Clicked)
+        val value2Button = findViewById<Button>(R.id.value2Button)
+        value2Button.setOnClickListener(_value2Clicked)
+        val value3Button = findViewById<Button>(R.id.value3Button)
+        value3Button.setOnClickListener(_value3Clicked)
+        val value4Button = findViewById<Button>(R.id.value4Button)
+        value4Button.setOnClickListener(_value4Clicked)
+        val value5Button = findViewById<Button>(R.id.value5Button)
+        value5Button.setOnClickListener(_value5Clicked)
+        val value6Button = findViewById<Button>(R.id.value6Button)
+        value6Button.setOnClickListener(_value6Clicked)
+
+        /*
+        https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
+        listOf(value1Button, value2Button, value3Button, value4Button,
+            value4Button, value5Button, value6Button).forEach {
+                it.setOnClickListener(::valueButtonClick)
+        }
+        */
+
+        val submitButton = findViewById<Button>(R.id.submitButton)
         submitButton.setOnClickListener(_submitClicked)
+    }
+
+    /*
+    https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
+    private fun valueButtonClick(view: View) {
+        with (view as Button) {
+            guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.).text.toString().toInt()
+            guessedPatternIndex++
+        }
+    }
+    */
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _value1Clicked = View.OnClickListener {
+        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value1Button).text.toString().toInt()
+        guessedPatternIndex++
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _value2Clicked = View.OnClickListener {
+        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value2Button).text.toString().toInt()
+        guessedPatternIndex++
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _value3Clicked = View.OnClickListener {
+        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value3Button).text.toString().toInt()
+        guessedPatternIndex++
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _value4Clicked = View.OnClickListener {
+        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value4Button).text.toString().toInt()
+        guessedPatternIndex++
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _value5Clicked = View.OnClickListener {
+        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value5Button).text.toString().toInt()
+        guessedPatternIndex++
+
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _value6Clicked = View.OnClickListener {
+        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value6Button).text.toString().toInt()
+        guessedPatternIndex++
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _submitClicked = View.OnClickListener {
         // Create the guessed pattern array
-        var guessedPattern = IntArray(gameEngine.GetCodeLength())
+        // var guessedPattern = IntArray(gameEngine.GetCodeLength())
 
         // Get the values from the guesses provided by the user
-        guessedPattern[0] = findViewById<EditText>(R.id.value1).text.toString().toInt()
-        guessedPattern[1] = findViewById<EditText>(R.id.value2).text.toString().toInt()
-        guessedPattern[2] = findViewById<EditText>(R.id.value3).text.toString().toInt()
-        guessedPattern[3] = findViewById<EditText>(R.id.value4).text.toString().toInt()
-        guessedPattern[4] = findViewById<EditText>(R.id.value5).text.toString().toInt()
-        guessedPattern[5] = findViewById<EditText>(R.id.value6).text.toString().toInt()
-        guessedPattern[6] = findViewById<EditText>(R.id.value7).text.toString().toInt()
-        guessedPattern[7] = findViewById<EditText>(R.id.value8).text.toString().toInt()
+        // guessedPattern[0] = findViewById<Button>(R.id.value1).text.toString().toInt()
+        // guessedPattern[1] = findViewById<Button>(R.id.value2).text.toString().toInt()
+        // guessedPattern[2] = findViewById<Button>(R.id.value3).text.toString().toInt()
+        // guessedPattern[3] = findViewById<Button>(R.id.value4).text.toString().toInt()
+        // guessedPattern[4] = findViewById<Button>(R.id.value5).text.toString().toInt()
+        // guessedPattern[5] = findViewById<Button>(R.id.value6).text.toString().toInt()
+        // guessedPattern[6] = findViewById<Button>(R.id.value7).text.toString().toInt()
+        // guessedPattern[7] = findViewById<Button>(R.id.value8).text.toString().toInt()
 
         // Test the results provided
         var results = gameEngine.TestResult(guessedPattern)
@@ -52,6 +128,9 @@ class GameActivity : AppCompatActivity() {
         // display the results to the user
         findViewById<TextView>(R.id.resultsText).text =
             "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
+
+        guessedPattern = IntArray(4)
+        guessedPatternIndex = 0
     }
 
     private fun readSettings(): Settings {
