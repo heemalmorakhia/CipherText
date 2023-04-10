@@ -2,6 +2,7 @@ package com.example.group_6_csci_4176
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -162,9 +163,6 @@ class GameActivity : AppCompatActivity() {
         // guessedPattern[6] = findViewById<Button>(R.id.value7).text.toString().toInt()
         // guessedPattern[7] = findViewById<Button>(R.id.value8).text.toString().toInt()
 
-        if (attempts === 4) {
-            findViewById<TextView>(R.id.resultsText).text = "YOU LOSE!!!"
-        }
         // Test the results provided
         var results = gameEngine.TestResult(guessedPattern)
 
@@ -178,16 +176,44 @@ class GameActivity : AppCompatActivity() {
         guessesArray[attempts] = guessedPattern.joinToString(" ")
         attempts += 1
         var previousAttemptsText = guessesArray.joinToString("\n")
-        findViewById<TextView>(R.id.resultsText2).text =
-            "${previousAttemptsText}"
 
         guessedPattern = IntArray(4)
         guessedPatternIndex = 0
+
+        handlePreviousAttempt(results)
+    }
+
+    private fun resetUserInput() {
+        for (i in 0 until codeLength) {
+            buttonsArray[i].setBackgroundColor(Color.TRANSPARENT)
+        }
     }
 
     private fun userInput(buttonText: String, color: String, index: Int) {
         buttonsArray[index].text = buttonText
         buttonsArray[index].setBackgroundColor(Color.parseColor(color))
+    }
+
+    private fun handlePreviousAttempt(results: IntArray) {
+        val previousGuessesLayout = findViewById<LinearLayout>(R.id.previousGuesses)
+        //Linear Layout that contains the guesses for one attempt
+        val row = LinearLayout(this)
+        row.orientation = LinearLayout.HORIZONTAL
+        for (i in 0 until codeLength) {
+            val newButton = Button(this)
+            newButton.text = buttonsArray[i].text
+            val layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                buttonWeight
+            )
+            row.addView(newButton, layoutParams)
+        }
+        val resultsExplained = TextView(this)
+        resultsExplained.text = "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
+        previousGuessesLayout.addView(row)
+        previousGuessesLayout.addView(resultsExplained)
+        resetUserInput()
     }
 
     private fun readSettings(): Settings {
