@@ -56,6 +56,9 @@ class GameActivity : AppCompatActivity() {
         val value6Button = findViewById<Button>(R.id.value6Button)
         value6Button.setOnClickListener(_value6Clicked)
 
+        val deleteButton = findViewById<Button>(R.id.deleteButton)
+        deleteButton.setOnClickListener(_deleteButtonClicked)
+
         /*
         https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
         listOf(value1Button, value2Button, value3Button, value4Button,
@@ -135,6 +138,14 @@ class GameActivity : AppCompatActivity() {
         userInput("6", "#800080", guessedPatternIndex)
         guessedPatternIndex++
     }
+
+    @SuppressLint("SuspiciousIndentation")
+    private val _deleteButtonClicked = View.OnClickListener {
+        guessedPatternIndex -= 1
+        guessedPattern[guessedPatternIndex] = 0
+        userInput("", "#00FFFFFF", guessedPatternIndex)
+    }
+
 
     @SuppressLint("SuspiciousIndentation")
     private val _submitClicked = View.OnClickListener {
