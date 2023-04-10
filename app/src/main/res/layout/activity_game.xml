@@ -20,6 +20,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.100000024" />
 
+    <TextView
+        android:id="@+id/resultsText2"
+        android:layout_width="279dp"
+        android:layout_height="77dp"
+        android:text="Guess Results"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.201" />
+
     <Button
         android:id="@+id/value1Button"
         android:layout_width="90dp"
@@ -113,5 +128,17 @@
         app:layout_constraintStart_toStartOf="@+id/resultsText"
         app:layout_constraintTop_toBottomOf="@+id/resultsText"
         app:layout_constraintVertical_bias="0.85" />
+
+    <LinearLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="291dp"
+        android:layout_height="104dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.393"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
