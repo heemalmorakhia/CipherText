@@ -13,24 +13,33 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.properties.Delegates
 
 data class Settings(var numberOfTokens: Int = 0,
                     var numberOfGuesses: Int = 0,
                     var colourBlind : Boolean = false,
                     var duplicates : Boolean = true);
+data class ColorOptions(var colorOption: Boolean = false,
+                        var color1: String = "",
+                        var color2: String = "",
+                        var color3: String = "",
+                        var color4: String = "",
+                        var color5: String = "",
+                        var color6: String = "");
 
 class GameActivity : AppCompatActivity() {
     final lateinit var gameEngine: GameEngine
+    var codeLength by Delegates.notNull<Int>()
 
-    var guessedPattern = IntArray(4)
+    lateinit var guessedPattern: IntArray
     var guessedPatternIndex = 0
+    final lateinit var buttonColors: ColorOptions
 
-    var guessesArray = Array(4) {""}
-    var attempts = 0
+    //lateinit var guessesArray = Array<String>
 
     private val buttonsArray: ArrayList<Button> = ArrayList()
-    val codeLength = 4 //Replace with settings info
     val buttonWeight : Float = 1.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +49,10 @@ class GameActivity : AppCompatActivity() {
         gameEngine = GameEngine
         gameEngine.CreateGame(readSettings())
 
-        println("Made it here.")
+        buttonColors = readColors()
+
+        codeLength = gameEngine.GetCodeLength()
+        guessedPattern = IntArray(codeLength)
 
         // guessedPattern = IntArray(gameEngine.GetCodeLength())
 
@@ -99,101 +111,91 @@ class GameActivity : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     private val _value1Clicked = View.OnClickListener {
-        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value1Button).text.toString().toInt()
-        userInput("1", "#ff0000", guessedPatternIndex)
-        guessedPatternIndex++
+        println(buttonColors.color1)
+        addToGuess("1", buttonColors.color1)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value2Clicked = View.OnClickListener {
-        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value2Button).text.toString().toInt()
-        userInput("2", "#ffa500", guessedPatternIndex)
-        guessedPatternIndex++
+        addToGuess("2", buttonColors.color2)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value3Clicked = View.OnClickListener {
-        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value3Button).text.toString().toInt()
-        userInput("3", "#ffff00", guessedPatternIndex)
-        guessedPatternIndex++
+        addToGuess("3", buttonColors.color3)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value4Clicked = View.OnClickListener {
-        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value4Button).text.toString().toInt()
-        userInput("4", "#008000", guessedPatternIndex)
-        guessedPatternIndex++
+        addToGuess("4", buttonColors.color4)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value5Clicked = View.OnClickListener {
-        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value5Button).text.toString().toInt()
-        userInput("5", "#0000ff", guessedPatternIndex)
-        guessedPatternIndex++
+        addToGuess("5", buttonColors.color5)
 
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value6Clicked = View.OnClickListener {
-        guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.value6Button).text.toString().toInt()
-        userInput("6", "#800080", guessedPatternIndex)
-        guessedPatternIndex++
+        addToGuess("6", buttonColors.color6)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _deleteButtonClicked = View.OnClickListener {
+        if (guessedPatternIndex == 0) return@OnClickListener
         guessedPatternIndex -= 1
         guessedPattern[guessedPatternIndex] = 0
-        userInput("", "#00FFFFFF", guessedPatternIndex)
+        buttonsArray[guessedPatternIndex].text = ""
+        buttonsArray[guessedPatternIndex].setBackgroundColor(Color.TRANSPARENT)
     }
 
 
     @SuppressLint("SuspiciousIndentation")
     private val _submitClicked = View.OnClickListener {
-        // Create the guessed pattern array
-        // var guessedPattern = IntArray(gameEngine.GetCodeLength())
-
-        // Get the values from the guesses provided by the user
-        // guessedPattern[0] = findViewById<Button>(R.id.value1).text.toString().toInt()
-        // guessedPattern[1] = findViewById<Button>(R.id.value2).text.toString().toInt()
-        // guessedPattern[2] = findViewById<Button>(R.id.value3).text.toString().toInt()
-        // guessedPattern[3] = findViewById<Button>(R.id.value4).text.toString().toInt()
-        // guessedPattern[4] = findViewById<Button>(R.id.value5).text.toString().toInt()
-        // guessedPattern[5] = findViewById<Button>(R.id.value6).text.toString().toInt()
-        // guessedPattern[6] = findViewById<Button>(R.id.value7).text.toString().toInt()
-        // guessedPattern[7] = findViewById<Button>(R.id.value8).text.toString().toInt()
-
+        if (guessedPatternIndex != codeLength)
+            //Add toast here
+            return@OnClickListener
         // Test the results provided
         var results = gameEngine.TestResult(guessedPattern)
 
         if(results[0] == gameEngine.GetCodeLength())
             findViewById<TextView>(R.id.resultsText).text = "YOU WIN!!!"
+        else if (gameEngine.GameLost()) {
+            findViewById<TextView>(R.id.resultsText).text = "YOU LOSE!!!"
+        }
         else
         // display the results to the user
         findViewById<TextView>(R.id.resultsText).text =
             "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
 
-        guessesArray[attempts] = guessedPattern.joinToString(" ")
-        attempts += 1
-        var previousAttemptsText = guessesArray.joinToString("\n")
+        //guessesArray[attempts] = guessedPattern.joinToString(" ")
+        //attempts += 1
+        //var previousAttemptsText = guessesArray.joinToString("\n")
 
-        guessedPattern = IntArray(4)
+        guessedPattern = IntArray(codeLength)
         guessedPatternIndex = 0
 
         handlePreviousAttempt(results)
+
     }
 
     private fun resetUserInput() {
         for (i in 0 until codeLength) {
             buttonsArray[i].setBackgroundColor(Color.TRANSPARENT)
+            buttonsArray[i].text = ""
         }
     }
 
-    private fun userInput(buttonText: String, color: String, index: Int) {
-        buttonsArray[index].text = buttonText
-        buttonsArray[index].setBackgroundColor(Color.parseColor(color))
+    private fun addToGuess(buttonText: String, color: String) {
+        if (guessedPatternIndex == codeLength) return
+        guessedPattern[guessedPatternIndex] = buttonText.toInt()
+        buttonsArray[guessedPatternIndex].text = buttonText
+        buttonsArray[guessedPatternIndex].setBackgroundColor(Color.parseColor(color))
+        guessedPatternIndex++
     }
 
+    @SuppressLint("Range")
     private fun handlePreviousAttempt(results: IntArray) {
         val previousGuessesLayout = findViewById<LinearLayout>(R.id.previousGuesses)
         //Linear Layout that contains the guesses for one attempt
@@ -201,7 +203,16 @@ class GameActivity : AppCompatActivity() {
         row.orientation = LinearLayout.HORIZONTAL
         for (i in 0 until codeLength) {
             val newButton = Button(this)
+            val colorCode: Int = buttonsArray[i].text.toString().toInt()
             newButton.text = buttonsArray[i].text
+            when(colorCode) {
+                1 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color1))
+                2 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color2))
+                3 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color3))
+                4 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color4))
+                5 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color5))
+                6 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color6))
+            }
             val layoutParams = LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -225,6 +236,29 @@ class GameActivity : AppCompatActivity() {
             numberOfGuesses = settingsJSON.getInt("numberOfGuesses"),
             colourBlind = settingsJSON.getBoolean("colourBlind"),
             duplicates = settingsJSON.getBoolean("duplicates")
+        )
+    }
+
+    private fun readColors(): ColorOptions {
+        val colorOption = gameEngine.GetColorblingOption()
+
+        val colorsJSON = JSONObject(
+            applicationContext.assets.open("colors.json").bufferedReader().use {it.readText()}
+        )
+        var arrayName: String
+        if(colorOption)
+            arrayName = "regular"
+        else
+            arrayName = "colorblindness1"
+        val jsonArray:JSONObject = colorsJSON.getJSONObject(arrayName)
+        return ColorOptions(
+            colorOption = colorOption,
+            color1 = jsonArray.getString("1"),
+            color2 = jsonArray.getString("2"),
+            color3 = jsonArray.getString("3"),
+            color4 = jsonArray.getString("4"),
+            color5 = jsonArray.getString("5"),
+            color6 = jsonArray.getString("6")
         )
     }
 }
