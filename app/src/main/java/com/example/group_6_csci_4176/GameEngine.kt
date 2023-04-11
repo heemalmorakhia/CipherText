@@ -24,10 +24,7 @@ object GameEngine {
         colorblindOption = settings.colourBlind
 
         // Create an array of different tokens
-        //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
         GenerateCipher(settings.numberOfTokens, settings.duplicates)
-
-        println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}")
     }
 
     private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){

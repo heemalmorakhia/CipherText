@@ -1,6 +1,7 @@
 package com.example.group_6_csci_4176
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
@@ -8,13 +9,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
+import java.io.FileReader
 import kotlin.properties.Delegates
 
 data class Settings(var numberOfTokens: Int = 0,
@@ -37,7 +39,7 @@ class GameActivity : AppCompatActivity() {
     var guessedPatternIndex = 0
     final lateinit var buttonColors: ColorOptions
 
-    //lateinit var guessesArray = Array<String>
+    var gameOver by Delegates.notNull<Boolean>()
 
     private val buttonsArray: ArrayList<Button> = ArrayList()
     val buttonWeight : Float = 1.0f
@@ -53,6 +55,8 @@ class GameActivity : AppCompatActivity() {
 
         codeLength = gameEngine.GetCodeLength()
         guessedPattern = IntArray(codeLength)
+
+        gameOver = false
 
         // guessedPattern = IntArray(gameEngine.GetCodeLength())
 
@@ -72,14 +76,6 @@ class GameActivity : AppCompatActivity() {
         val deleteButton = findViewById<Button>(R.id.deleteButton)
         deleteButton.setOnClickListener(_deleteButtonClicked)
 
-        /*
-        https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
-        listOf(value1Button, value2Button, value3Button, value4Button,
-            value4Button, value5Button, value6Button).forEach {
-                it.setOnClickListener(::valueButtonClick)
-        }
-        */
-
         val submitButton = findViewById<Button>(R.id.submitButton)
         submitButton.setOnClickListener(_submitClicked)
 
@@ -98,16 +94,6 @@ class GameActivity : AppCompatActivity() {
             containerLayout.addView(button, layoutParams)
         }
     }
-
-    /*
-    https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
-    private fun valueButtonClick(view: View) {
-        with (view as Button) {
-            guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.).text.toString().toInt()
-            guessedPatternIndex++
-        }
-    }
-    */
 
     @SuppressLint("SuspiciousIndentation")
     private val _value1Clicked = View.OnClickListener {
@@ -153,25 +139,16 @@ class GameActivity : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     private val _submitClicked = View.OnClickListener {
+        // If the entered the pattern is not the correct length, don't continue
         if (guessedPatternIndex != codeLength)
             //Add toast here
             return@OnClickListener
+
+        // If the game is over, don't continue
+        if(gameOver) return@OnClickListener
+
         // Test the results provided
         var results = gameEngine.TestResult(guessedPattern)
-
-        if(results[0] == gameEngine.GetCodeLength())
-            findViewById<TextView>(R.id.resultsText).text = "YOU WIN!!!"
-        else if (gameEngine.GameLost()) {
-            findViewById<TextView>(R.id.resultsText).text = "YOU LOSE!!!"
-        }
-        else
-        // display the results to the user
-        findViewById<TextView>(R.id.resultsText).text =
-            "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
-
-        //guessesArray[attempts] = guessedPattern.joinToString(" ")
-        //attempts += 1
-        //var previousAttemptsText = guessesArray.joinToString("\n")
 
         guessedPattern = IntArray(codeLength)
         guessedPatternIndex = 0
@@ -221,22 +198,38 @@ class GameActivity : AppCompatActivity() {
             row.addView(newButton, layoutParams)
         }
         val resultsExplained = TextView(this)
-        resultsExplained.text = "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
+
+        if(results[0] == gameEngine.GetCodeLength()) {
+            Toast.makeText(applicationContext,"YOU WIN!!!", Toast.LENGTH_LONG).show()
+            gameOver = true
+            resultsExplained.text = "YOU WIN!!!"
+        }
+        else if (gameEngine.GameLost()) {
+            Toast.makeText(applicationContext,"You Lose! :(", Toast.LENGTH_SHORT).show()
+            gameOver = true
+            resultsExplained.text = "You Lose! :("
+        } else {
+            resultsExplained.text =
+                "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
+        }
         previousGuessesLayout.addView(row)
         previousGuessesLayout.addView(resultsExplained)
         resetUserInput()
     }
 
-    private fun readSettings(): Settings {
-        val settingsJSON = JSONObject(
-            applicationContext.assets.open("settings.json").bufferedReader().use { it.readText() })
+    private fun getAssetsDir(context: Context): File {
+        return context.externalCacheDir ?: context.cacheDir
+    }
 
-        return Settings(
-            numberOfTokens = settingsJSON.getInt("numberOfTokens"),
-            numberOfGuesses = settingsJSON.getInt("numberOfGuesses"),
-            colourBlind = settingsJSON.getBoolean("colourBlind"),
-            duplicates = settingsJSON.getBoolean("duplicates")
-        )
+    private fun readSettings(): Settings {
+        val file = File(getAssetsDir(this), "settings.json")
+
+        val gson = Gson()
+
+        // Replace "settings.json" with the name of your JSON file.
+        val reader = FileReader(file)
+
+        return  gson.fromJson(reader, Settings::class.java)
     }
 
     private fun readColors(): ColorOptions {
