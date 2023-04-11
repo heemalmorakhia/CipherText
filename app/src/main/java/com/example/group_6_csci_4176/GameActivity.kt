@@ -222,14 +222,22 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun readSettings(): Settings {
-        val file = File(getAssetsDir(this), "settings.json")
+        try{
+            val file = File(getAssetsDir(this), "settings.json")
 
-        val gson = Gson()
+            val gson = Gson()
 
-        // Replace "settings.json" with the name of your JSON file.
-        val reader = FileReader(file)
+            // Replace "settings.json" with the name of your JSON file.
+            val reader = FileReader(file)
 
-        return  gson.fromJson(reader, Settings::class.java)
+            return  gson.fromJson(reader, Settings::class.java)
+        } catch (e: Exception){
+            // If the user has never created a settings file, then this will serve as the default
+            return Settings(numberOfTokens = 4,
+                numberOfGuesses = 10,
+                duplicates = true,
+                colourBlind = false)
+        }
     }
 
     private fun readColors(): ColorOptions {
