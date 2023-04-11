@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         quitButton.setOnClickListener(_quitClicked)
 
         mediaPlayer = MediaPlayer.create(this, R.raw.background)
-        mediaPlayer.setVolume(0.05F, 0.05F)
+        mediaPlayer.setVolume(0.1F, 0.1F)
         mediaPlayer.isLooping = true
         mediaPlayer.start()
         soundOn = true

@@ -1,19 +1,16 @@
 package com.example.group_6_csci_4176
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import org.json.JSONArray
+import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -192,6 +189,7 @@ class GameActivity : AppCompatActivity() {
         guessedPattern[guessedPatternIndex] = buttonText.toInt()
         buttonsArray[guessedPatternIndex].text = buttonText
         buttonsArray[guessedPatternIndex].setBackgroundColor(Color.parseColor(color))
+        buttonsArray[guessedPatternIndex].setTextColor(Color.parseColor("Black"))
         guessedPatternIndex++
     }
 
@@ -205,6 +203,7 @@ class GameActivity : AppCompatActivity() {
             val newButton = Button(this)
             val colorCode: Int = buttonsArray[i].text.toString().toInt()
             newButton.text = buttonsArray[i].text
+            newButton.setTextColor(Color.parseColor("Black"))
             when(colorCode) {
                 1 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color1))
                 2 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color2))
@@ -222,6 +221,7 @@ class GameActivity : AppCompatActivity() {
         }
         val resultsExplained = TextView(this)
         resultsExplained.text = "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
+        resultsExplained.setTypeface(Typeface.DEFAULT_BOLD)
         previousGuessesLayout.addView(row)
         previousGuessesLayout.addView(resultsExplained)
         resetUserInput()
@@ -260,5 +260,11 @@ class GameActivity : AppCompatActivity() {
             color5 = jsonArray.getString("5"),
             color6 = jsonArray.getString("6")
         )
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed() // This line is important, as it ensures that the default back button behavior is still executed if your custom code does not consume the event
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }
