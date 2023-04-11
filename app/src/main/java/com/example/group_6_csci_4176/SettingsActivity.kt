@@ -63,6 +63,7 @@ class SettingsActivity : AppCompatActivity() {
                 writer.write(json)
                 writer.close()
                 Toast.makeText(this, "Settings Saved!", Toast.LENGTH_LONG).show()
+                goBack()
             } catch (e: Exception) {
                 Log.e("SettingsActivity", "Error writing to file", e)
             }
@@ -76,6 +77,10 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed() // This line is important, as it ensures that the default back button behavior is still executed if your custom code does not consume the event
+        goBack()
+    }
+
+    fun goBack(){
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
