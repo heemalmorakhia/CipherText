@@ -13,6 +13,7 @@ object GameEngine {
     private lateinit var masterCode : Array<Token>
     private var guesses by Delegates.notNull<Int>()
     private var maxGuesses by Delegates.notNull<Int>()
+    private var colorblindOption: Boolean = false
 
     private fun GameEngine(){}
 
@@ -20,6 +21,7 @@ object GameEngine {
     fun CreateGame(settings : Settings){
         guesses = 0
         maxGuesses = settings.numberOfGuesses
+        colorblindOption = settings.colourBlind
 
         // Create an array of different tokens
         //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
@@ -44,6 +46,7 @@ object GameEngine {
         *   results[1] = # of correct colours in the incorrect position
         *   results[2] = # of incorrect colours
          */
+        guesses ++
         var results = IntArray(3)
 
         ResetMasterCode()
@@ -72,8 +75,16 @@ object GameEngine {
         return masterCode.size
     }
 
+    fun GetColorblingOption() : Boolean {
+        return colorblindOption
+    }
+
     fun GameLost() : Boolean {
         return guesses == maxGuesses
+    }
+
+    fun GetGuesses() : Int {
+        return guesses
     }
 
     /*
