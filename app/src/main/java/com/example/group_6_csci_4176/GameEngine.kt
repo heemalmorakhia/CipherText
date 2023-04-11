@@ -1,7 +1,5 @@
 package com.example.group_6_csci_4176
 
-import android.util.Log
-import java.util.Collections
 import kotlin.properties.Delegates
 import kotlin.random.Random
 
@@ -24,10 +22,7 @@ object GameEngine {
         colorblindOption = settings.colourBlind
 
         // Create an array of different tokens
-        //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
         GenerateCipher(settings.numberOfTokens, settings.duplicates)
-
-        println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}")
     }
 
     private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){

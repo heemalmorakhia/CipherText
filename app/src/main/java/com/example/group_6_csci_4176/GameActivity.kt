@@ -1,17 +1,19 @@
 package com.example.group_6_csci_4176
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import org.json.JSONObject
+import java.io.File
+import java.io.FileReader
 import kotlin.properties.Delegates
 
 data class Settings(var numberOfTokens: Int = 0,
@@ -34,7 +36,7 @@ class GameActivity : AppCompatActivity() {
     var guessedPatternIndex = 0
     final lateinit var buttonColors: ColorOptions
 
-    //lateinit var guessesArray = Array<String>
+    var gameOver by Delegates.notNull<Boolean>()
 
     private val buttonsArray: ArrayList<Button> = ArrayList()
     val buttonWeight : Float = 1.0f
@@ -48,8 +50,11 @@ class GameActivity : AppCompatActivity() {
 
         buttonColors = readColors()
 
+        //Sets the guessed code's length dynamically following settings
         codeLength = gameEngine.GetCodeLength()
         guessedPattern = IntArray(codeLength)
+
+        gameOver = false
 
         // guessedPattern = IntArray(gameEngine.GetCodeLength())
 
@@ -69,42 +74,31 @@ class GameActivity : AppCompatActivity() {
         val deleteButton = findViewById<Button>(R.id.deleteButton)
         deleteButton.setOnClickListener(_deleteButtonClicked)
 
-        /*
-        https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
-        listOf(value1Button, value2Button, value3Button, value4Button,
-            value4Button, value5Button, value6Button).forEach {
-                it.setOnClickListener(::valueButtonClick)
-        }
-        */
-
         val submitButton = findViewById<Button>(R.id.submitButton)
         submitButton.setOnClickListener(_submitClicked)
 
         val containerLayout = findViewById<LinearLayout>(R.id.containerLayout)
+        //Creates the buttons so the user can see their guessed pattern
         for (i in 0 until codeLength) {
             val button = Button(this)
             button.isEnabled = false
             button.setBackgroundColor(Color.TRANSPARENT)
             buttonsArray.add(button)
+            //Adds layout params to dynamically change the layout based on the number of buttons
             val layoutParams = LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 buttonWeight
             )
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL
+            //Adds buttons (with layout parameters) to the Linear Layout
             containerLayout.addView(button, layoutParams)
+            /*The code for the dynamically changing the layout of new buttons was adapted from [1][2]
+            [1]Dynamically add view with LayoutParams. StackOverflowh. Retrieved from ttps://stackoverflow.com/questions/22700408/dynamically-add-view-with-layoutparams
+            [2]center button programmatically and dynamic layout. StackOverflowh. Retrieved from https://stackoverflow.com/questions/24606263/center-button-programmatically-and-dynamic-layout
+             */
         }
     }
-
-    /*
-    https://stackoverflow.com/questions/12227310/how-can-we-use-a-variable-in-r-id
-    private fun valueButtonClick(view: View) {
-        with (view as Button) {
-            guessedPattern[guessedPatternIndex] = findViewById<Button>(R.id.).text.toString().toInt()
-            guessedPatternIndex++
-        }
-    }
-    */
 
     @SuppressLint("SuspiciousIndentation")
     private val _value1Clicked = View.OnClickListener {
@@ -150,25 +144,16 @@ class GameActivity : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     private val _submitClicked = View.OnClickListener {
+        // If the entered the pattern is not the correct length, don't continue
         if (guessedPatternIndex != codeLength)
             //Add toast here
             return@OnClickListener
+
+        // If the game is over, don't continue
+        if(gameOver) return@OnClickListener
+
         // Test the results provided
         var results = gameEngine.TestResult(guessedPattern)
-
-        if(results[0] == gameEngine.GetCodeLength())
-            findViewById<TextView>(R.id.resultsText).text = "YOU WIN!!!"
-        else if (gameEngine.GameLost()) {
-            findViewById<TextView>(R.id.resultsText).text = "YOU LOSE!!!"
-        }
-        else
-        // display the results to the user
-        findViewById<TextView>(R.id.resultsText).text =
-            "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
-
-        //guessesArray[attempts] = guessedPattern.joinToString(" ")
-        //attempts += 1
-        //var previousAttemptsText = guessesArray.joinToString("\n")
 
         guessedPattern = IntArray(codeLength)
         guessedPatternIndex = 0
@@ -195,6 +180,7 @@ class GameActivity : AppCompatActivity() {
 
     @SuppressLint("Range")
     private fun handlePreviousAttempt(results: IntArray) {
+        //Uses nested LinearLayouts to display the previous attempts
         val previousGuessesLayout = findViewById<LinearLayout>(R.id.previousGuesses)
         //Linear Layout that contains the guesses for one attempt
         val row = LinearLayout(this)
@@ -218,25 +204,53 @@ class GameActivity : AppCompatActivity() {
                 buttonWeight
             )
             row.addView(newButton, layoutParams)
+            /*The code for the dynamically changing the layout of new buttons was adapted from [1][2]
+            [1]Dynamically add view with LayoutParams. StackOverflowh. Retrieved from ttps://stackoverflow.com/questions/22700408/dynamically-add-view-with-layoutparams
+            [2]center button programmatically and dynamic layout. StackOverflowh. Retrieved from https://stackoverflow.com/questions/24606263/center-button-programmatically-and-dynamic-layout
+             */
         }
         val resultsExplained = TextView(this)
-        resultsExplained.text = "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
         resultsExplained.setTypeface(Typeface.DEFAULT_BOLD)
+
+        if(results[0] == gameEngine.GetCodeLength()) {
+            Toast.makeText(applicationContext,"YOU WIN!!!", Toast.LENGTH_LONG).show()
+            gameOver = true
+            resultsExplained.text = "YOU WIN!!!"
+        }
+        else if (gameEngine.GameLost()) {
+            Toast.makeText(applicationContext,"You Lose! :(", Toast.LENGTH_SHORT).show()
+            gameOver = true
+            resultsExplained.text = "You Lose! :("
+        } else {
+            resultsExplained.text =
+                "Fully Correct: ${results[0]}\nPartially Correct: ${results[1]}\nIncorrect: ${results[2]}"
+        }
         previousGuessesLayout.addView(row)
         previousGuessesLayout.addView(resultsExplained)
         resetUserInput()
     }
 
-    private fun readSettings(): Settings {
-        val settingsJSON = JSONObject(
-            applicationContext.assets.open("settings.json").bufferedReader().use { it.readText() })
+    private fun getAssetsDir(context: Context): File {
+        return context.externalCacheDir ?: context.cacheDir
+    }
 
-        return Settings(
-            numberOfTokens = settingsJSON.getInt("numberOfTokens"),
-            numberOfGuesses = settingsJSON.getInt("numberOfGuesses"),
-            colourBlind = settingsJSON.getBoolean("colourBlind"),
-            duplicates = settingsJSON.getBoolean("duplicates")
-        )
+    private fun readSettings(): Settings {
+        try{
+            val file = File(getAssetsDir(this), "settings.json")
+
+            val gson = Gson()
+
+            // Replace "settings.json" with the name of your JSON file.
+            val reader = FileReader(file)
+
+            return  gson.fromJson(reader, Settings::class.java)
+        } catch (e: Exception){
+            // If the user has never created a settings file, then this will serve as the default
+            return Settings(numberOfTokens = 4,
+                numberOfGuesses = 10,
+                duplicates = true,
+                colourBlind = false)
+        }
     }
 
     private fun readColors(): ColorOptions {

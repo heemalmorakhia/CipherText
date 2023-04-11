@@ -16,13 +16,7 @@ import com.google.gson.stream.JsonWriter
 import java.io.File
 import java.io.FileWriter
 
-data class UserSettings( val numberOfTokens: Int, val numberOfGuesses: Int, val colourBlind: Boolean, val duplicates: Boolean)
 class SettingsActivity : AppCompatActivity() {
-    lateinit var numOfTokensET : EditText
-    lateinit var numOfGuessesET : EditText
-    lateinit var colourBlindSwitchSW : Switch
-    lateinit var duplicatesSW : Switch
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -33,13 +27,14 @@ class SettingsActivity : AppCompatActivity() {
             val numOfTokens = findViewById<EditText>(R.id.numberOfTokensField).text.toString().toInt()
             val numOfGuesses = findViewById<EditText>(R.id.numberOfGuessesField).text.toString().toInt()
             val colourBlindSwitch = findViewById<Switch>(R.id.colorBlindSwitch).isChecked
-            val duplicates = findViewById<Switch>(R.id.duplicatesSwitch).isChecked
+            val duplicates =    if(numOfTokens < 6) (findViewById<Switch>(R.id.duplicatesSwitch).isChecked)
+                                else true
 
-            val data = UserSettings(numOfTokens, numOfGuesses, colourBlindSwitch, duplicates)
+            val data = Settings(numOfTokens, numOfGuesses, colourBlindSwitch, duplicates)
 
             val gson = GsonBuilder()
-                .registerTypeAdapter(UserSettings::class.java, object : TypeAdapter<UserSettings>() {
-                    override fun write(out: JsonWriter, value: UserSettings?) {
+                .registerTypeAdapter(Settings::class.java, object : TypeAdapter<Settings>() {
+                    override fun write(out: JsonWriter, value: Settings?) {
                         if (value == null) {
                             out.nullValue()
                             return
@@ -52,8 +47,8 @@ class SettingsActivity : AppCompatActivity() {
                         out.endObject()
                     }
 
-                    override fun read(input: JsonReader): UserSettings? {
-                        // Implement this method if you need to read JSON into UserSettings object
+                    override fun read(input: JsonReader): Settings? {
+                        // Implement this method if you need to read JSON into Settings object
                         return null
                     }
 
