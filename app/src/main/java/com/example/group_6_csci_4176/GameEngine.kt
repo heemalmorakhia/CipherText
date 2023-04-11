@@ -1,5 +1,6 @@
 package com.example.group_6_csci_4176
 
+import android.util.Log
 import java.util.Collections
 import kotlin.properties.Delegates
 import kotlin.random.Random
@@ -12,24 +13,27 @@ object GameEngine {
     private lateinit var masterCode : Array<Token>
     private var guesses by Delegates.notNull<Int>()
     private var maxGuesses by Delegates.notNull<Int>()
+    private var colorblindOption: Boolean = false
 
     private fun GameEngine(){}
 
-    // Create the game by selecting 4 total different numbers from 1-8.
+    // Create the game by selecting 4 total different numbers from 1-6.
     fun CreateGame(settings : Settings){
         guesses = 0
         maxGuesses = settings.numberOfGuesses
+        colorblindOption = settings.colourBlind
 
         // Create an array of different tokens
-        masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        //masterCode = Array(settings.numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
+        GenerateCipher(settings.numberOfTokens, settings.duplicates)
 
-        println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}\t${masterCode[4]}\t${masterCode[5]}\t${masterCode[6]}\t${masterCode[7]}")
+        println("Mastercode: ${masterCode[0]}\t${masterCode[1]}\t${masterCode[2]}\t${masterCode[3]}")
     }
 
     private fun GenerateCipher(numberOfTokens : Int, duplicates : Boolean){
-        masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 8 + 1)) }
+        masterCode = if(duplicates) Array(numberOfTokens){ Token(Random.nextInt(1, 6 + 1)) }
         else {
-            val potentialValues : List<Int> =  (0..8).shuffled().take(numberOfTokens)
+            val potentialValues : List<Int> =  (1..6).shuffled().take(numberOfTokens)
             Array(numberOfTokens){i -> Token(potentialValues[i])}
         }
     }
@@ -42,6 +46,7 @@ object GameEngine {
         *   results[1] = # of correct colours in the incorrect position
         *   results[2] = # of incorrect colours
          */
+        guesses ++
         var results = IntArray(3)
 
         ResetMasterCode()
@@ -70,8 +75,16 @@ object GameEngine {
         return masterCode.size
     }
 
+    fun GetColorblingOption() : Boolean {
+        return colorblindOption
+    }
+
     fun GameLost() : Boolean {
         return guesses == maxGuesses
+    }
+
+    fun GetGuesses() : Int {
+        return guesses
     }
 
     /*
