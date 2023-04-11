@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private val _quitClicked = View.OnClickListener {
         stopMediaPlayer()
-        exitProcess(0)
+        finishAffinity()
     }
 
     fun stopMediaPlayer(){
