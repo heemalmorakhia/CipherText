@@ -53,6 +53,7 @@ class GameActivity : AppCompatActivity() {
 
         buttonColors = readColors()
 
+        //Sets the guessed code's length dynamically following settings
         codeLength = gameEngine.GetCodeLength()
         guessedPattern = IntArray(codeLength)
 
@@ -80,18 +81,25 @@ class GameActivity : AppCompatActivity() {
         submitButton.setOnClickListener(_submitClicked)
 
         val containerLayout = findViewById<LinearLayout>(R.id.containerLayout)
+        //Creates the buttons so the user can see their guessed pattern
         for (i in 0 until codeLength) {
             val button = Button(this)
             button.isEnabled = false
             button.setBackgroundColor(Color.TRANSPARENT)
             buttonsArray.add(button)
+            //Adds layout params to dynamically change the layout based on the number of buttons
             val layoutParams = LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 buttonWeight
             )
             layoutParams.gravity = Gravity.CENTER_HORIZONTAL
+            //Adds buttons (with layout parameters) to the Linear Layout
             containerLayout.addView(button, layoutParams)
+            /*The code for the dynamically changing the layout of new buttons was adapted from [1][2]
+            [1]Dynamically add view with LayoutParams. StackOverflowh. Retrieved from ttps://stackoverflow.com/questions/22700408/dynamically-add-view-with-layoutparams
+            [2]center button programmatically and dynamic layout. StackOverflowh. Retrieved from https://stackoverflow.com/questions/24606263/center-button-programmatically-and-dynamic-layout
+             */
         }
     }
 
@@ -174,6 +182,7 @@ class GameActivity : AppCompatActivity() {
 
     @SuppressLint("Range")
     private fun handlePreviousAttempt(results: IntArray) {
+        //Uses nested LinearLayouts to display the previous attempts
         val previousGuessesLayout = findViewById<LinearLayout>(R.id.previousGuesses)
         //Linear Layout that contains the guesses for one attempt
         val row = LinearLayout(this)
@@ -196,6 +205,10 @@ class GameActivity : AppCompatActivity() {
                 buttonWeight
             )
             row.addView(newButton, layoutParams)
+            /*The code for the dynamically changing the layout of new buttons was adapted from [1][2]
+            [1]Dynamically add view with LayoutParams. StackOverflowh. Retrieved from ttps://stackoverflow.com/questions/22700408/dynamically-add-view-with-layoutparams
+            [2]center button programmatically and dynamic layout. StackOverflowh. Retrieved from https://stackoverflow.com/questions/24606263/center-button-programmatically-and-dynamic-layout
+             */
         }
         val resultsExplained = TextView(this)
 
