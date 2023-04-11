@@ -2,18 +2,15 @@ package com.example.group_6_csci_4176
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileReader
@@ -177,6 +174,7 @@ class GameActivity : AppCompatActivity() {
         guessedPattern[guessedPatternIndex] = buttonText.toInt()
         buttonsArray[guessedPatternIndex].text = buttonText
         buttonsArray[guessedPatternIndex].setBackgroundColor(Color.parseColor(color))
+        buttonsArray[guessedPatternIndex].setTextColor(Color.parseColor("Black"))
         guessedPatternIndex++
     }
 
@@ -191,6 +189,7 @@ class GameActivity : AppCompatActivity() {
             val newButton = Button(this)
             val colorCode: Int = buttonsArray[i].text.toString().toInt()
             newButton.text = buttonsArray[i].text
+            newButton.setTextColor(Color.parseColor("Black"))
             when(colorCode) {
                 1 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color1))
                 2 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color2))
@@ -211,6 +210,7 @@ class GameActivity : AppCompatActivity() {
              */
         }
         val resultsExplained = TextView(this)
+        resultsExplained.setTypeface(Typeface.DEFAULT_BOLD)
 
         if(results[0] == gameEngine.GetCodeLength()) {
             Toast.makeText(applicationContext,"YOU WIN!!!", Toast.LENGTH_LONG).show()
@@ -274,5 +274,11 @@ class GameActivity : AppCompatActivity() {
             color5 = jsonArray.getString("5"),
             color6 = jsonArray.getString("6")
         )
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed() // This line is important, as it ensures that the default back button behavior is still executed if your custom code does not consume the event
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

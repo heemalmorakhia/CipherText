@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Switch
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
@@ -21,12 +22,6 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val saveButton = findViewById<Button>(R.id.settingsSaveButton)
-        val backButton = findViewById<Button>(R.id.backButtonSettings)
-
-        backButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
 
         saveButton.setOnClickListener {
             val numOfTokens = findViewById<EditText>(R.id.numberOfTokensField).text.toString().toInt()
@@ -67,7 +62,7 @@ class SettingsActivity : AppCompatActivity() {
                 val writer = FileWriter(file)
                 writer.write(json)
                 writer.close()
-                println("Settings saved to ${file.path}")
+                Toast.makeText(this, "Settings Saved!", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Log.e("SettingsActivity", "Error writing to file", e)
             }
@@ -77,5 +72,11 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun getAssetsDir(context: Context): File {
         return context.externalCacheDir ?: context.cacheDir
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed() // This line is important, as it ensures that the default back button behavior is still executed if your custom code does not consume the event
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

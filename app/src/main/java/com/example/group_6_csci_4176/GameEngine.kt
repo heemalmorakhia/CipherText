@@ -1,7 +1,5 @@
 package com.example.group_6_csci_4176
 
-import android.util.Log
-import java.util.Collections
 import kotlin.properties.Delegates
 import kotlin.random.Random
 
