@@ -35,6 +35,7 @@ class GameActivity : AppCompatActivity() {
 
     lateinit var guessedPattern: IntArray
     var guessedPatternIndex = 0
+    final lateinit var buttonColors: ColorOptions
 
     //lateinit var guessesArray = Array<String>
 
@@ -48,7 +49,7 @@ class GameActivity : AppCompatActivity() {
         gameEngine = GameEngine
         gameEngine.CreateGame(readSettings())
 
-        println(readColors())
+        buttonColors = readColors()
 
         codeLength = gameEngine.GetCodeLength()
         guessedPattern = IntArray(codeLength)
@@ -110,33 +111,34 @@ class GameActivity : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     private val _value1Clicked = View.OnClickListener {
-        addToGuess("1", "#ff0000")
+        println(buttonColors.color1)
+        addToGuess("1", buttonColors.color1)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value2Clicked = View.OnClickListener {
-        addToGuess("2", "#ffa500")
+        addToGuess("2", buttonColors.color2)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value3Clicked = View.OnClickListener {
-        addToGuess("3", "#ffff00")
+        addToGuess("3", buttonColors.color3)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value4Clicked = View.OnClickListener {
-        addToGuess("4", "#008000")
+        addToGuess("4", buttonColors.color4)
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value5Clicked = View.OnClickListener {
-        addToGuess("5", "#0000ff")
+        addToGuess("5", buttonColors.color5)
 
     }
 
     @SuppressLint("SuspiciousIndentation")
     private val _value6Clicked = View.OnClickListener {
-        addToGuess("6", "#800080")
+        addToGuess("6", buttonColors.color6)
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -193,6 +195,7 @@ class GameActivity : AppCompatActivity() {
         guessedPatternIndex++
     }
 
+    @SuppressLint("Range")
     private fun handlePreviousAttempt(results: IntArray) {
         val previousGuessesLayout = findViewById<LinearLayout>(R.id.previousGuesses)
         //Linear Layout that contains the guesses for one attempt
@@ -203,12 +206,12 @@ class GameActivity : AppCompatActivity() {
             val colorCode: Int = buttonsArray[i].text.toString().toInt()
             newButton.text = buttonsArray[i].text
             when(colorCode) {
-                1 -> newButton.setBackgroundColor(Color.parseColor("#ff0000"))
-                2 -> newButton.setBackgroundColor(Color.parseColor("#ffa500"))
-                3 -> newButton.setBackgroundColor(Color.parseColor("#ffff00"))
-                4 -> newButton.setBackgroundColor(Color.parseColor("#008000"))
-                5 -> newButton.setBackgroundColor(Color.parseColor("#0000ff"))
-                6 -> newButton.setBackgroundColor(Color.parseColor("#800080"))
+                1 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color1))
+                2 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color2))
+                3 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color3))
+                4 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color4))
+                5 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color5))
+                6 -> newButton.setBackgroundColor(Color.parseColor(buttonColors.color6))
             }
             val layoutParams = LinearLayout.LayoutParams(
                 0,
@@ -242,14 +245,20 @@ class GameActivity : AppCompatActivity() {
         val colorsJSON = JSONObject(
             applicationContext.assets.open("colors.json").bufferedReader().use {it.readText()}
         )
+        var arrayName: String
+        if(colorOption)
+            arrayName = "regular"
+        else
+            arrayName = "colorblindness1"
+        val jsonArray:JSONObject = colorsJSON.getJSONObject(arrayName)
         return ColorOptions(
             colorOption = colorOption,
-            color1 = "",
-            color2 = "",
-            color3 = "",
-            color4 = "",
-            color5 = "",
-            color6 = ""
+            color1 = jsonArray.getString("1"),
+            color2 = jsonArray.getString("2"),
+            color3 = jsonArray.getString("3"),
+            color4 = jsonArray.getString("4"),
+            color5 = jsonArray.getString("5"),
+            color6 = jsonArray.getString("6")
         )
     }
 }
