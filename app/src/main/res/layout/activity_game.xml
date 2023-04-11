@@ -6,148 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-    <TextView
-        android:id="@+id/resultsText"
-        android:layout_width="290dp"
-        android:layout_height="290dp"
-        android:text="Guess Results"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.100000024" />
-
-    <Button
-        android:id="@+id/value1Button"
-        android:layout_width="90dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#ff0000"
-        android:text="1"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/value4Button"
-        app:layout_constraintStart_toStartOf="@+id/resultsText"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.65" />
-
-    <Button
-        android:id="@+id/value2Button"
-        android:layout_width="90dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#ffa500"
-        android:text="2"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/value5Button"
-        app:layout_constraintEnd_toStartOf="@+id/value3Button"
-        app:layout_constraintStart_toEndOf="@+id/value1Button"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.65" />
-
-    <Button
-        android:id="@+id/value3Button"
-        android:layout_width="90dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#ffff00"
-        android:text="3"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/value6Button"
-        app:layout_constraintEnd_toEndOf="@+id/resultsText"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.65" />
-
-    <Button
-        android:id="@+id/value4Button"
-        android:layout_width="90dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#008000"
-        android:text="4"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
-        app:layout_constraintStart_toStartOf="@+id/resultsText"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.9" />
-
-    <Button
-        android:id="@+id/value5Button"
-        android:layout_width="90dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#0000ff"
-        android:text="5"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
-        app:layout_constraintEnd_toStartOf="@+id/value6Button"
-        app:layout_constraintStart_toEndOf="@+id/value4Button"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.9" />
-
-    <Button
-        android:id="@+id/value6Button"
-        android:layout_width="90dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#800080"
-        android:text="6"
-        android:textColor="#000000"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/submitButton"
-        app:layout_constraintEnd_toEndOf="@+id/resultsText"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.9" />
-
-    <Button
-        android:id="@+id/submitButton"
-        android:layout_width="290dp"
-        android:layout_height="100dp"
-        android:backgroundTint="#000000"
-        android:text="Submit"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/resultsText"
-        app:layout_constraintStart_toStartOf="@+id/resultsText"
-        app:layout_constraintTop_toBottomOf="@+id/resultsText"
-        app:layout_constraintVertical_bias="0.85" />
-
-    <LinearLayout
-        android:id="@+id/containerLayout"
-        android:layout_width="295dp"
-        android:layout_height="47dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.525"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.454"></LinearLayout>
-
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#000000"
-        android:text="@string/delete_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <ScrollView
-        android:layout_width="370dp"
-        android:layout_height="266dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="360dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.012">
+        app:layout_constraintVertical_bias="0.05">
 
         <LinearLayout
             android:id="@+id/previousGuesses"
@@ -161,4 +28,115 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.329"></LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="310dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.10"></LinearLayout>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:backgroundTint="#000000"
+        android:text="X"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.10" />
+
+    <Button
+        android:id="@+id/value1Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#ff0000"
+        android:text="1"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/value4Button"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/containerLayout" />
+
+    <Button
+        android:id="@+id/value2Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#ffa500"
+        android:text="2"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/value5Button"
+        app:layout_constraintEnd_toStartOf="@+id/value3Button"
+        app:layout_constraintStart_toEndOf="@+id/value1Button"
+        app:layout_constraintTop_toBottomOf="@+id/containerLayout" />
+
+    <Button
+        android:id="@+id/value3Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#ffff00"
+        android:text="3"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/value6Button"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/containerLayout" />
+
+    <Button
+        android:id="@+id/value4Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#008000"
+        android:text="4"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2" />
+
+    <Button
+        android:id="@+id/value5Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#0000ff"
+        android:text="5"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/submitButton"
+        app:layout_constraintEnd_toStartOf="@+id/value6Button"
+        app:layout_constraintStart_toEndOf="@+id/value4Button" />
+
+    <Button
+        android:id="@+id/value6Button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#800080"
+        android:text="6"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@+id/value5Button"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="360dp"
+        android:layout_height="100dp"
+        android:backgroundTint="#000000"
+        android:text="Submit"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="@+id/scrollView2"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.95" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
