@@ -205,6 +205,10 @@ class GameActivity : AppCompatActivity() {
                 buttonWeight
             )
             row.addView(newButton, layoutParams)
+            /*The code for the dynamically changing the layout of new buttons was adapted from [1][2]
+            [1]Dynamically add view with LayoutParams. StackOverflowh. Retrieved from ttps://stackoverflow.com/questions/22700408/dynamically-add-view-with-layoutparams
+            [2]center button programmatically and dynamic layout. StackOverflowh. Retrieved from https://stackoverflow.com/questions/24606263/center-button-programmatically-and-dynamic-layout
+             */
         }
         val resultsExplained = TextView(this)
 
