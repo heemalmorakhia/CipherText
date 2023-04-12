@@ -7,7 +7,7 @@
     "5" : "#0000ff",
     "6" : "#800080"
   },
-  "colorblindness1" : {
+  "colorblindness" : {
     "1" : "#4477AA",
     "2" : "#66CCEE",
     "3" : "#EE7733",

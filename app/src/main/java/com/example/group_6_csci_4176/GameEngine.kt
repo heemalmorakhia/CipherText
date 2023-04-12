@@ -3,8 +3,9 @@ package com.example.group_6_csci_4176
 import kotlin.properties.Delegates
 import kotlin.random.Random
 
-// A data class for use in our application. I read through the documentation for this and it is really simple.
-// https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body
+// The code for the data class was adapted from [2].
+// [2] “Data classes | Kotlin Documentation,” Kotlin, 11-Apr-2023. [Online]. 
+// Available: https://kotlinlang.org/docs/data-classes.html#properties-declared-in-the-class-body. [Accessed: 11-Apr-2023]. 
 data class Token(var value: Int = 0, var used: Boolean = false)
 
 object GameEngine {
@@ -21,7 +22,7 @@ object GameEngine {
         maxGuesses = settings.numberOfGuesses
         colorblindOption = settings.colourBlind
 
-        // Create an array of different tokens
+        // Create an array of different tokens.
         GenerateCipher(settings.numberOfTokens, settings.duplicates)
     }
 
@@ -40,14 +41,14 @@ object GameEngine {
         *   results[0] = # of correct colours in the correct location
         *   results[1] = # of correct colours in the incorrect position
         *   results[2] = # of incorrect colours
-         */
+        */
         guesses ++
         var results = IntArray(3)
 
         ResetMasterCode()
 
-        // check for all the correct guesses in correct location. This must be done
-        // first to avoid the issue of positions being used for other results.
+        // check for all the correct guesses in correct location. 
+        // This must be done first to avoid the issue of positions being used for other results.
         for(i in guessedCode.indices){
             if(guessedCode[i] == masterCode[i].value) {
                 masterCode[i].used = true
@@ -55,12 +56,12 @@ object GameEngine {
             }
         }
 
-        // get the guesses.
+        // Retrieve the guesses.
         for(i in guessedCode.indices){
             if(HasAvailablePosition(guessedCode[i])) results[1] += 1
         }
 
-        // the remaining guesses are incorrect
+        // The remaining guesses are incorrect.
         results[2] = masterCode.size - (results[1] + results[0])
 
         return results
@@ -83,11 +84,11 @@ object GameEngine {
     }
 
     /*
-        HELPER FUNCTIONS
-     */
+    HELPER FUNCTIONS
+    */
 
-    // check for the correct guesses in incorrect locations, I had to do it this way
-    // to avoid false positives/negatives.
+    // Check for the correct guesses in incorrect locations. 
+    // This had to be done to avoid false positives/negatives.
     private fun HasAvailablePosition(value: Int) : Boolean{
         for(i in masterCode.indices)
             if(masterCode[i].value == value && !masterCode[i].used){

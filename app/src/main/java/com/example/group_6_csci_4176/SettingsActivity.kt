@@ -21,8 +21,10 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        // Creates saveButton for altered settings.
         val saveButton = findViewById<Button>(R.id.settingsSaveButton)
 
+        // Establishes onClick events for each setting.
         saveButton.setOnClickListener {
             val numOfTokens = findViewById<EditText>(R.id.numberOfTokensField).text.toString().toInt()
             val numOfGuesses = findViewById<EditText>(R.id.numberOfGuessesField).text.toString().toInt()
@@ -30,8 +32,10 @@ class SettingsActivity : AppCompatActivity() {
             val duplicates =    if(numOfTokens < 6) (findViewById<Switch>(R.id.duplicatesSwitch).isChecked)
                                 else true
 
+            // Collects state of each setting.
             val data = Settings(numOfTokens, numOfGuesses, colourBlindSwitch, duplicates)
 
+            // Creates and updates necessary file for settings values.
             val gson = GsonBuilder()
                 .registerTypeAdapter(Settings::class.java, object : TypeAdapter<Settings>() {
                     override fun write(out: JsonWriter, value: Settings?) {
@@ -48,7 +52,6 @@ class SettingsActivity : AppCompatActivity() {
                     }
 
                     override fun read(input: JsonReader): Settings? {
-                        // Implement this method if you need to read JSON into Settings object
                         return null
                     }
 
@@ -75,11 +78,13 @@ class SettingsActivity : AppCompatActivity() {
         return context.externalCacheDir ?: context.cacheDir
     }
 
+    // Forces call to goBack function.
     override fun onBackPressed() {
-        super.onBackPressed() // This line is important, as it ensures that the default back button behavior is still executed if your custom code does not consume the event
+        super.onBackPressed()
         goBack()
     }
 
+    // Returns to main menu mainActivity.
     fun goBack(){
         startActivity(Intent(this, MainActivity::class.java))
         finish()
